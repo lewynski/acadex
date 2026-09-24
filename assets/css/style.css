@@ -1403,7 +1403,19 @@ button.tile {
   50%       { box-shadow: 0 0 28px 6px rgba(10,132,255,0.16); }
 }
 
-.drop { animation: dropGlow 3.8s ease-in-out infinite; }
+/* Override drop zone for better dark-mode visibility */
+.drop {
+  border: 2px dashed var(--accent);
+  background: color-mix(in srgb, var(--paper) 80%, var(--accent) 5%);
+  animation: dropGlow 3.8s ease-in-out infinite;
+}
+
+.drop:hover,
+.drop.is-hot {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: 0 0 28px 6px rgba(10,132,255,0.18);
+}
 
 /* ── Scroll-reveal utility ── */
 .reveal {
