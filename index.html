@@ -84,30 +84,63 @@
     </script>
   </head>
   <body>
-    <header class="masthead">
-      <div class="masthead-in">
-        <span class="wordmark">Acadex</span>
-        <span class="masthead-right">
+    <!-- ═══════════════════════ NAVBAR ═══════════════════════ -->
+    <nav class="navbar" id="navbar">
+      <div class="navbar-in">
+        <a href="index.html" class="nav-logo">Acadex</a>
+
+        <div class="nav-links" role="list">
+          <a href="index.html"     class="nav-link active" role="listitem">Acadex</a>
+          <a href="converter.html" class="nav-link"        role="listitem">File Converter</a>
+        </div>
+
+        <div class="nav-actions">
           <span class="masthead-meta" id="head-meta">Nothing uploaded yet</span>
           <button class="btn btn-quiet btn-small hidden" id="keep" type="button">Save as file</button>
           <button class="theme" id="theme" type="button" aria-pressed="false" title="Switch to dark">
             <span aria-hidden="true" id="theme-mark">&#9788;</span>
-            <span class="sr" id="theme-said">Switch to dark</span>
+            <span class="sr"         id="theme-said">Switch to dark</span>
           </button>
-        </span>
+          <button
+            class="hamburger"
+            id="hamburger"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+            aria-controls="nav-mobile"
+          >
+            <span class="hbar"></span>
+            <span class="hbar"></span>
+            <span class="hbar"></span>
+          </button>
+        </div>
       </div>
-    </header>
+
+      <!-- Mobile drawer -->
+      <div class="nav-mobile" id="nav-mobile" aria-hidden="true">
+        <a href="index.html"     class="nav-mobile-link">Acadex</a>
+        <a href="converter.html" class="nav-mobile-link">File Converter</a>
+      </div>
+    </nav>
+
 
     <main class="shell" id="app">
       <section class="hero">
-        <h1>Your slides,<br />as a reviewer.</h1>
-        <p>
-          Add the deck or handout you are studying. You get questions drawn from all of it, the correct answers, a
-          score that shows where you slipped, and a file you can keep for when you are offline.
-        </p>
+        <div class="hero-orbs" aria-hidden="true">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+          <div class="orb orb-3"></div>
+        </div>
+        <div class="hero-content">
+          <h1>Your slides,<br />as a reviewer.</h1>
+          <p>
+            Add the deck or handout you are studying. You get questions drawn from all of it, the correct answers, a
+            score that shows where you slipped, and a file you can keep for when you are offline.
+          </p>
+        </div>
       </section>
 
-      <section class="section section-flush">
+      <section class="section section-flush reveal">
         <div class="drop" id="drop">
           <p class="drop-title">Drop your files here</p>
           <p class="drop-note">
@@ -291,5 +324,38 @@
     <script src="assets/js/generate.js" defer></script>
     <script src="assets/js/exporter.js" defer></script>
     <script src="assets/js/app.js" defer></script>
+
+    <script>
+      /* ── Hamburger toggle ── */
+      (function () {
+        const ham = document.getElementById('hamburger');
+        const mob = document.getElementById('nav-mobile');
+        if (!ham || !mob) return;
+        ham.addEventListener('click', function () {
+          var open = mob.classList.toggle('open');
+          ham.setAttribute('aria-expanded', String(open));
+          mob.setAttribute('aria-hidden',   String(!open));
+        });
+      })();
+
+      /* ── Scroll-reveal via IntersectionObserver ── */
+      (function () {
+        var els = document.querySelectorAll('.reveal');
+        if (!els.length) return;
+        if (!('IntersectionObserver' in window)) {
+          els.forEach(function (el) { el.classList.add('in-view'); });
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add('in-view');
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.08 });
+        els.forEach(function (el) { io.observe(el); });
+      })();
+    </script>
   </body>
 </html>
