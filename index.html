@@ -327,15 +327,39 @@
     <script src="assets/js/mascot.js" defer></script>
 
     <script>
-      /* ── Hamburger toggle ── */
+      /* ── Responsive mobile navigation ── */
       (function () {
+        const nav = document.getElementById('navbar');
         const ham = document.getElementById('hamburger');
         const mob = document.getElementById('nav-mobile');
-        if (!ham || !mob) return;
-        ham.addEventListener('click', function () {
-          var open = mob.classList.toggle('open');
+        if (!nav || !ham || !mob) return;
+
+        function setOpen(open) {
+          mob.classList.toggle('open', open);
           ham.setAttribute('aria-expanded', String(open));
-          mob.setAttribute('aria-hidden',   String(!open));
+          ham.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+          mob.setAttribute('aria-hidden', String(!open));
+        }
+
+        ham.addEventListener('click', function (event) {
+          event.stopPropagation();
+          setOpen(ham.getAttribute('aria-expanded') !== 'true');
+        });
+
+        mob.querySelectorAll('a').forEach(function (link) {
+          link.addEventListener('click', function () { setOpen(false); });
+        });
+
+        document.addEventListener('click', function (event) {
+          if (!nav.contains(event.target)) setOpen(false);
+        });
+
+        document.addEventListener('keydown', function (event) {
+          if (event.key === 'Escape') setOpen(false);
+        });
+
+        window.addEventListener('resize', function () {
+          if (window.innerWidth > 700) setOpen(false);
         });
       })();
 
